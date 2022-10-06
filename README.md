@@ -7,8 +7,7 @@ Authors:
 Andreas G Zignago
 Eric Brutskiy
 Anish Chouhan
-
-
+Anuja Chouhan
 
 
 P.S. Feel free to update this as we work on the project try not to remove the
