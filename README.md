@@ -2,7 +2,7 @@
 Hello, Welcome to Team Array Out of Bound's Project!
 Authors:
 Andreas G Zignago
-
+Eric Brutskiy
 
 
 
