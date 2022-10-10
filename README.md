@@ -9,6 +9,7 @@ Eric Brutskiy
 Anish Chouhan
 Anuja Chouhan
 Christian Vela Pasillas
+Aaron Jumawan
 
 P.S. Feel free to update this as we work on the project try not to remove the
 author names please.
