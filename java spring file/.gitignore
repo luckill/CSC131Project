@@ -34,3 +34,4 @@ build/
 
 
 .DS_Store
+java spring file/src/main/resources/application.properties
