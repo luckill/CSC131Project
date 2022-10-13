@@ -7,9 +7,9 @@ import java.util.*;
 public class AcademyAward
 {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    private int yerOfFilm;
+    private int yearOfFilm;
     private int yearOfAward;
     private int ceremony;
     private String category;
@@ -22,9 +22,9 @@ public class AcademyAward
 
     }
 
-    public AcademyAward( int yerOfFilm, int yearOfAward, int ceremony, String category, String name, String film, boolean winner)
+    public AcademyAward(int yearOfFilm, int yearOfAward, int ceremony, String category, String name, String film, boolean winner)
     {
-        this.yerOfFilm = yerOfFilm;
+        this.yearOfFilm = yearOfFilm;
         this.yearOfAward = yearOfAward;
         this.ceremony = ceremony;
         this.category = category;
@@ -33,81 +33,105 @@ public class AcademyAward
         this.winner = winner;
     }
 
-    public int getId() {
+    public int getId()
+    {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(int id)
+    {
         this.id = id;
     }
 
-    public int getYerOfFilm() {
-        return yerOfFilm;
+    public int getYearOfFilm()
+    {
+        return yearOfFilm;
     }
 
-    public void setYerOfFilm(int yerOfFilm) {
-        this.yerOfFilm = yerOfFilm;
+    public void setYerOfFilm(int yearOfFilm)
+    {
+        this.yearOfFilm = yearOfFilm;
     }
 
-    public int getYearOfAward() {
+    public int getYearOfAward()
+    {
         return yearOfAward;
     }
 
-    public void setYearOfAward(int yearOfAward) {
+    public void setYearOfAward(int yearOfAward)
+    {
         this.yearOfAward = yearOfAward;
     }
 
-    public int getCeremony() {
+    public int getCeremony()
+    {
         return ceremony;
     }
 
-    public void setCeremony(int ceremony) {
+    public void setCeremony(int ceremony)
+    {
         this.ceremony = ceremony;
     }
 
-    public String getCategory() {
+    public String getCategory()
+    {
         return category;
     }
 
-    public void setCategory(String category) {
+    public void setCategory(String category)
+    {
         this.category = category;
     }
 
-    public String getName() {
+    public String getName()
+    {
         return name;
     }
 
-    public void setName(String name) {
+    public void setName(String name)
+    {
         this.name = name;
     }
 
-    public String getFilm() {
+    public String getFilm()
+    {
         return film;
     }
 
-    public void setFilm(String film) {
+    public void setFilm(String film)
+    {
         this.film = film;
     }
 
-    public boolean isWinner() {
+    public boolean isWinner()
+    {
         return winner;
     }
 
-    public void setWinner(boolean winner) {
+    public void setWinner(boolean winner)
+    {
         this.winner = winner;
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        AcademyAward that = (AcademyAward) o;
-        return id == that.id && yerOfFilm == that.yerOfFilm && yearOfAward == that.yearOfAward && ceremony == that.ceremony && winner == that.winner && category.equals(that.category) && name.equals(that.name) && film.equals(that.film);
+    public boolean equals(Object obj)
+    {
+        if (obj instanceof AcademyAward)
+        {
+            AcademyAward other = (AcademyAward) obj;
+            return this.yearOfFilm == other.yearOfFilm &&
+                    this.yearOfAward == other.yearOfAward &&
+                    this.ceremony == other.ceremony &&
+                    this.category.equals(other.category) &&
+                    this.film.equals(other.film) &&
+                    this.winner == other.winner;
+        }
+        return false;
     }
 
     @Override
     public int hashCode()
     {
-        return Objects.hash(yerOfFilm, yearOfAward);
+        return Objects.hash(yearOfFilm, yearOfAward);
     }
 }
