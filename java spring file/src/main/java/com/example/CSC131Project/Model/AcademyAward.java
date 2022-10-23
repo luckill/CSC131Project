@@ -1,14 +1,10 @@
 package com.example.CSC131Project;
 
-import javax.persistence.*;
 import java.util.*;
 
-@Entity
+
 public class AcademyAward
 {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
     private int yearOfFilm;
     private int yearOfAward;
     private int ceremony;
@@ -31,16 +27,6 @@ public class AcademyAward
         this.name = name;
         this.film = film;
         this.winner = winner;
-    }
-
-    public int getId()
-    {
-        return id;
-    }
-
-    public void setId(int id)
-    {
-        this.id = id;
     }
 
     public int getYearOfFilm()

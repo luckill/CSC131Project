@@ -7,18 +7,18 @@ import org.springframework.web.bind.annotation.*;
 public class HelloWorldController
 {
 
-    @GetMapping("/")
+    /*@GetMapping("/")
     @ResponseBody
     public String HelloWorld()
     {
         String message = "Hello world, this is a java spring application!!!";
         return message;
-    }
+    }*/
 
-    @GetMapping("/error")
+    /*@GetMapping("/error")
     @ResponseBody
     public String Error()
     {
         return "ERROR!!! - something is wrong!!";
-    }
+    }*/
 }
