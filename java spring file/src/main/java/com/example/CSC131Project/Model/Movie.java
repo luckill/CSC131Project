@@ -21,8 +21,7 @@ public class Movie {
 
      public Movie(){
     }//Default Constructor
-    public Movie(int I,String M, String T, String D, int Y, String L){
-         ID = I;
+    public Movie(String M, String T, String D, int Y, String L){
          MovieID = M;
          Title = T;
          Director = D;
@@ -33,9 +32,7 @@ public class Movie {
     public int getID(){
          return ID;
     }
-    public void setID(int i) {
-        this.ID = i;
-    }
+
     public String getMovieID(){
         return MovieID;
     }
