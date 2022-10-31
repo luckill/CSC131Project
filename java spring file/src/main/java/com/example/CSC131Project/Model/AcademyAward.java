@@ -1,4 +1,4 @@
-package com.example.CSC131Project;
+package com.example.CSC131Project.Model;
 
 import java.util.*;
 
