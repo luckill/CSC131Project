@@ -13,20 +13,20 @@ public class Movie {
     @GeneratedValue(strategy = GenerationType.AUTO)
 
     private int ID;
-    private String MovieID;
-    private String Title;
-    private String Director;
-    private int Year;
-    private String Language;
+    private String movieID;
+    private String title;
+    private String director;
+    private int year;
+    private String language;
 
      public Movie(){
     }//Default Constructor
     public Movie(String M, String T, String D, int Y, String L){
-         MovieID = M;
-         Title = T;
-         Director = D;
-         Year = Y;
-         Language = L;
+         movieID = M;
+         title = T;
+         director = D;
+         year = Y;
+         language = L;
     }//Constructor
 
     public int getID(){
@@ -34,34 +34,34 @@ public class Movie {
     }
 
     public String getMovieID(){
-        return MovieID;
+        return movieID;
     }
     public void setMovieID(String i){
-        this.MovieID = i;
+        this.movieID = i;
     }
     public String getTitle(){
-        return Title;
+        return title;
     }
     public void setTitle(String i){
-        this.Title = i;
+        this.title = i;
     }
     public String getDirector(){
-        return Director;
+        return director;
     }
     public void setDirector(String i){
-        this.Director = i;
+        this.director = i;
     }
     public int getYear(){
-        return Year;
+        return year;
     }
     public void setYear(int i){
-        this.Year = i;
+        this.year = i;
     }
     public String getLanguage(){
-        return Language;
+        return language;
     }
     public void setLanguage(String i){
-        this.Language = i;
+        this.language = i;
     }
 
 }//Movie class
