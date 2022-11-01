@@ -19,7 +19,6 @@ public class AcademyAward
 
     public AcademyAward()
     {
-
     }
 
     public AcademyAward(int yearOfFilm, int yearOfAward, int ceremony, String category, String name, String film, boolean winner)

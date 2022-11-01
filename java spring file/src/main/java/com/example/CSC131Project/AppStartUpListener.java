@@ -1,5 +1,6 @@
 package com.example.CSC131Project;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.*;
 import org.springframework.context.event.*;
 import org.springframework.stereotype.*;
@@ -11,7 +12,8 @@ import java.util.*;
 @Component
 public class AppStartUpListener implements ApplicationListener<ContextRefreshedEvent>
 {
-    private AcademyAwardRepository academyAwardRepository;
+    @Autowired
+    AcademyAwardRepository academyAwardRepository;
 
     public AppStartUpListener(AcademyAwardRepository academyAwardRepository)
     {
