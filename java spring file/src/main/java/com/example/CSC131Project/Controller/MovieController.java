@@ -34,8 +34,9 @@ public class MovieController
     @GetMapping("/getMovieByTitle/{title}")
     public String getMovieByTitle(@PathVariable String title) throws JsonProcessingException {
         ObjectMapper objectMapper = new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-        if(movieRepository.findByTitle(title) != null){
-            return objectMapper.writeValueAsString(movieRepository.findByTitle(title).get(0));
+        List<Movie> movies = movieRepository.findByTitle(title);
+        if(movies.size() != 0){
+            return objectMapper.writeValueAsString(movies.get(0));
         }
         String json = IMDBApi.getRequest(title);
         Movie thisMovie = objectMapper.readValue(json, Movie.class);
