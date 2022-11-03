@@ -1,5 +1,6 @@
 package com.example.CSC131Project.Controller;
 
+import com.example.CSC131Project.ApiConfiguration;
 import com.example.CSC131Project.Model.*;
 import org.json.simple.*;
 import org.json.simple.parser.*;
@@ -18,6 +19,12 @@ public class AcademyAwardController
 {
     @Autowired
     public MovieRepository movieRepository;
+    private final ApiConfiguration apiConfiguration;
+
+    public AcademyAwardController(ApiConfiguration apiConfiguration)
+    {
+        this.apiConfiguration = apiConfiguration;
+    }
 
     @GetMapping("/actor/{year}")
     public String FindActorAwardByYear(@PathVariable("year") int year)
@@ -43,7 +50,8 @@ public class AcademyAwardController
                 array.add(obj);
                 if (movieRepository.findByTitle(title).isEmpty())
                 {
-                    String temp = ApiCommunicator.getRequest(title);
+                    ApiCommunicator communicator = new ApiCommunicator();
+                    String temp = communicator.getRequest(title, apiConfiguration.AuthorizeToke());
                     JSONParser parser = new JSONParser();
                     JSONObject json = (JSONObject) parser.parse(temp);
 
