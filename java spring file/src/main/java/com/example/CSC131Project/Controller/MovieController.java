@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+
 @RestController
 @Component
 @Service
@@ -27,11 +28,12 @@ public class MovieController
     private final ApiConfiguration apiConfiguration;
     ApiCommunicator IMDBApi = new ApiCommunicator();
 
+    ObjectMapper objectMapper = new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+
     public MovieController(ApiConfiguration apiConfiguration)
     {
         this.apiConfiguration = apiConfiguration;
     }
-    ObjectMapper objectMapper = new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
 
     @GetMapping("/getMovieById/{movieId}")
@@ -40,17 +42,22 @@ public class MovieController
         //placeholder, replace with your code
         return "";
     }
+    //Finds movie as a title first looks through the db
+    //if nothing found in db goes to the IMDBApi and adds it to the db and returns it
     @GetMapping("/getMovieByTitle/{title}")
     public String getMovieByTitle(@PathVariable String title) throws JsonProcessingException {
-        ObjectMapper objectMapper = new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         List<Movie> movies = movieRepository.findByTitle(title);
         if(movies.size() != 0){
             return objectMapper.writeValueAsString(movies.get(0));
         }
         String json = IMDBApi.getRequest(title, apiConfiguration.AuthorizeToke());
-        Movie thisMovie = objectMapper.readValue(json, Movie.class);
-        thisMovie = movieRepository.save(thisMovie);
-        return objectMapper.writeValueAsString(thisMovie);
+        if(!json.contains("Movie not found!"))
+        {
+            Movie thisMovie = objectMapper.readValue(json, Movie.class);
+            thisMovie = movieRepository.save(thisMovie);
+            return objectMapper.writeValueAsString(thisMovie);
+        }
+        return objectMapper.writeValueAsString(objectMapper.readTree(json));
     }
     @PostMapping("/addMovie/{title}")
     public String addMovie(@PathVariable String title) throws ParseException
@@ -63,6 +70,7 @@ public class MovieController
         return "";
     }
 
+
     @Modifying
     @DeleteMapping("/delete/{ID}")
     public String deleteMovieById(@PathVariable int ID) throws JsonProcessingException {
@@ -73,6 +81,7 @@ public class MovieController
         }
         String error = "{\"Error\": \"Movie id does not exist\"}";
         return objectMapper.writeValueAsString(objectMapper.readTree(error));
+
     }
 
 }
