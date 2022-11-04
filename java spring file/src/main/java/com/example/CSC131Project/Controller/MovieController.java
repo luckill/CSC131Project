@@ -9,6 +9,7 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.*;
@@ -30,6 +31,8 @@ public class MovieController
     {
         this.apiConfiguration = apiConfiguration;
     }
+    ObjectMapper objectMapper = new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+
 
     @GetMapping("/getMovieById/{movieId}")
     public String getMovieById(@PathVariable String movieId)
@@ -59,10 +62,17 @@ public class MovieController
     {
         return "";
     }
-    @DeleteMapping("/delete/{movieId}")
-    public String deleteMovieById(@PathVariable String movieId)
-    {
-        return"";
+
+    @Modifying
+    @DeleteMapping("/delete/{ID}")
+    public String deleteMovieById(@PathVariable int ID) throws JsonProcessingException {
+        List<Movie> movies = movieRepository.findByID(ID);
+        if(movies.size() != 0){
+            movieRepository.deleteByID(ID);
+            return objectMapper.writeValueAsString(movies.get(0));
+        }
+        String error = "{\"Error\": \"Movie id does not exist\"}";
+        return objectMapper.writeValueAsString(objectMapper.readTree(error));
     }
 
 }
