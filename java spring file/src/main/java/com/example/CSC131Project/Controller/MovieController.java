@@ -34,6 +34,7 @@ public class MovieController
         this.apiConfiguration = apiConfiguration;
     }
 
+
     @GetMapping("/getMovieById/{movieId}")
     public String getMovieById(@PathVariable String movieId)
     {
@@ -68,10 +69,18 @@ public class MovieController
     {
         return "";
     }
+
+
     @Modifying
     @DeleteMapping("/delete/{ID}")
     public String deleteMovieById(@PathVariable int ID) throws JsonProcessingException {
-
+        List<Movie> movies = movieRepository.findByID(ID);
+        if(movies.size() != 0){
+            movieRepository.deleteByID(ID);
+            return objectMapper.writeValueAsString(movies.get(0));
+        }
+        String error = "{\"Error\": \"Movie id does not exist\"}";
+        return objectMapper.writeValueAsString(objectMapper.readTree(error));
     }
 
 }
