@@ -81,7 +81,6 @@ public class MovieController
         }
         String error = "{\"Error\": \"Movie id does not exist\"}";
         return objectMapper.writeValueAsString(objectMapper.readTree(error));
-
     }
 
 }
