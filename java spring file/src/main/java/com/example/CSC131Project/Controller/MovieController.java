@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-
 @RestController
 @Component
 @Service
@@ -57,6 +56,7 @@ public class MovieController
             return objectMapper.writeValueAsString(thisMovie);
         }
         return objectMapper.writeValueAsString(objectMapper.readTree(json));
+
     }
     @PostMapping("/addMovie/{title}")
     public String addMovie(@PathVariable String title) throws ParseException
