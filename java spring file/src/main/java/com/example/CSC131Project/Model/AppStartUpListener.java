@@ -7,13 +7,11 @@ import org.springframework.stereotype.*;
 import java.io.*;
 import java.util.*;
 
+//Adds the academy award info from csv file when ever it starts up
 @Component
 public class AppStartUpListener implements ApplicationListener<ContextRefreshedEvent>
 {
-
     public static Map<Integer, AcademyAward> dataMap;
-
-
 
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event)

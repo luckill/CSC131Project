@@ -5,7 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.http.HttpHeaders;
 
-
+//Communicates with the IMDB api to get info on movies
 public class ApiCommunicator
 {
     public String getRequest(String url, String KEY)
