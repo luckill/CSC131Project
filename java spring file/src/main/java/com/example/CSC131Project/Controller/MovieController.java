@@ -1,5 +1,6 @@
 package com.example.CSC131Project.Controller;
 
+import com.example.CSC131Project.ApiConfiguration;
 import com.example.CSC131Project.Model.ApiCommunicator;
 import com.example.CSC131Project.Model.Movie;
 import com.example.CSC131Project.Model.MovieRepository;
@@ -14,8 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+
 
 @RestController
 @Component
@@ -25,8 +25,16 @@ public class MovieController
 {
     @Autowired
     MovieRepository movieRepository;
+    private final ApiConfiguration apiConfiguration;
     ApiCommunicator IMDBApi = new ApiCommunicator();
+
     ObjectMapper objectMapper = new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+
+    public MovieController(ApiConfiguration apiConfiguration)
+    {
+        this.apiConfiguration = apiConfiguration;
+    }
+
     @GetMapping("/getMovieById/{movieId}")
     public String getMovieById(@PathVariable String movieId)
     {
@@ -41,7 +49,7 @@ public class MovieController
         if(movies.size() != 0){
             return objectMapper.writeValueAsString(movies.get(0));
         }
-        String json = IMDBApi.getRequest(title);
+        String json = IMDBApi.getRequest(title, apiConfiguration.AuthorizeToke());
         if(!json.contains("Movie not found!"))
         {
             Movie thisMovie = objectMapper.readValue(json, Movie.class);

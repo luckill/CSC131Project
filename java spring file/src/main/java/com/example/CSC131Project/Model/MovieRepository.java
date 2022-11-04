@@ -13,5 +13,5 @@ public interface MovieRepository extends CrudRepository<Movie, String> {
 
     @Query("SELECT m FROM Movie m WHERE m.movieID=?1")
     List<Movie> findByMovieID(String movieID);
-    
+
 }
