@@ -14,6 +14,10 @@ public interface MovieRepository extends CrudRepository<Movie, String> {
     @Query("SELECT m FROM Movie m WHERE m.ID=?1")
     List<Movie> findByID(int ID);
 
+
+    @Query("SELECT m FROM Movie m WHERE m.title=?1")
+    Movie find1Movie(String title);
+
     @Transactional
     @Modifying
     @Query("DELETE FROM Movie m WHERE m.ID=?1")
