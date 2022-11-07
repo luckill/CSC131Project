@@ -11,6 +11,7 @@ import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.*;
 
@@ -64,11 +65,41 @@ public class MovieController
     {
         return "";
     }
-    @PutMapping("")
-    public String updateMovie()
+    @PutMapping("/updateMovie/{title}")
+    public String updateMovie(@RequestBody String body, @PathVariable String title) throws JsonProcessingException
     {
-        return "";
-    }
+        Movie movie = movieRepository.find1Movie(title);
+        System.out.println(body);
+        if(movie != null && body != null)
+        {
+            Movie temp = objectMapper.readValue(body, Movie.class);
+            //return objectMapper.writeValueAsString(temp); //change
+
+            if(temp.getTitle()!= null)
+            {
+                movie.setTitle(temp.getTitle());
+            }
+            if(temp.getDirector() != null)
+            {
+                movie.setDirector(temp.getDirector());
+            }
+            if(temp.getYear() != 0)
+            {
+                movie.setYear(temp.getYear());
+            }
+            if (temp.getLanguage() != null)
+            {
+                movie.setLanguage(temp.getLanguage());
+            }
+            movieRepository.save(movie);
+            return objectMapper.writeValueAsString(movie);
+        }
+        else
+        {
+            return "Movie not found";
+        }
+
+    } //update movie closing
 
 
     @Modifying
