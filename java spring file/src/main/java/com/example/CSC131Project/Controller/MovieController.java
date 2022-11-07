@@ -69,13 +69,11 @@ public class MovieController
     public String updateMovie(@RequestBody String body, @PathVariable String title) throws JsonProcessingException
     {
         Movie movie = movieRepository.find1Movie(title);
-        System.out.println(body);
-        if(movie != null && body != null)
+        if(movie != null && body != null) //Needs better error checking on an empty send, e.g. no {} post.
         {
             Movie temp = objectMapper.readValue(body, Movie.class);
-            //return objectMapper.writeValueAsString(temp); //change
 
-            if(temp.getTitle()!= null)
+            if(temp.getTitle()!= null)  //Each if checks for a user inputted put/edit. And sets if it exists.
             {
                 movie.setTitle(temp.getTitle());
             }
