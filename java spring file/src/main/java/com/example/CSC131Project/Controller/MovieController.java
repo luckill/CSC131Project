@@ -1,53 +1,31 @@
 package com.example.CSC131Project.Controller;
 
 import com.example.CSC131Project.Model.ApiCommunicator;
+import com.example.CSC131Project.ApiConfiguration;
 import com.example.CSC131Project.Model.Movie;
 import com.example.CSC131Project.Model.MovieRepository;
-import com.example.CSC131Project.interfaceService.ImovieService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.ui.Model;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Controller;
+import org.springframework.stereotype.Service;
 
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-//@Component
-//@Service
 @RequestMapping("/movies")
-
 public class MovieController
 {
-    @Autowired
-    public ImovieService service;
-    @GetMapping("/list")
-    public String list(Model model){
-        List<Movie> movies =service.list();
-        model.addAttribute("movies",movies);
-        return "index";
-    }
-
-    @GetMapping("/new")
-    public String add(Model model){
-        model.addAttribute("movie",new Movie());
-        return "AddForm";
-    }
-    @PostMapping("/save")
-    public String save(@Valid Movie m, Model model){
-        service.save(m);
-        return "redirect:/list";
-    }
-
-
     @Autowired
     public MovieRepository movieRepository;
     ApiCommunicator iMDBApi = new ApiCommunicator();
     ObjectMapper objectMapper = new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+
     @GetMapping("/getMovieById/{movieId}")
     public String getMovieById(@PathVariable String movieId)
     {
@@ -61,7 +39,8 @@ public class MovieController
         if (movies.size() != 0) {
             return objectMapper.writeValueAsString(movies.get(0));
         }
-        String json = iMDBApi.getRequest(title, apiConfiguration.AuthorizeToke());
+        //String json = iMDBApi.getRequest(title, apiConfiguration.AuthorizeToke());
+        String json = iMDBApi.getRequest(title, "d860e921");
         if (!json.contains("Movie not found!")) {
             Movie thisMovie = objectMapper.readValue(json, Movie.class);
             thisMovie = movieRepository.save(thisMovie);
@@ -69,20 +48,62 @@ public class MovieController
         }
         return objectMapper.writeValueAsString(objectMapper.readTree(json));
     }
-    @PostMapping("/addMovie/{title}")
-    public String addMovie(@PathVariable String title) throws ParseException
-    {
-        return "";
+    @PostMapping("/addMovie")
+    public String addMovie(@RequestBody String body) throws JsonProcessingException {
+        Movie temp = objectMapper.readValue(body, Movie.class);
+        Movie movie = movieRepository.find1Movie(temp.getTitle());
+        if(movie == null && body != null){
+            movieRepository.save(temp);
+            return objectMapper.writeValueAsString(temp);
+        }
+        return "Movie already exists";
     }
-    @PutMapping("")
-    public String updateMovie()
+    @PutMapping("/updateMovie/{title}")
+    public String updateMovie(@RequestBody String body, @PathVariable String title) throws JsonProcessingException
     {
-        return "";
-    }
-    @DeleteMapping("/delete/{movieId}")
-    public String deleteMovieById(@PathVariable String movieId)
-    {
-        return"";
+        Movie movie = movieRepository.find1Movie(title);
+        if(movie != null && body != null)
+        {
+            Movie temp = objectMapper.readValue(body, Movie.class);
+            //return objectMapper.writeValueAsString(temp); //change
+
+            if(temp.getTitle()!= null)
+            {
+                movie.setTitle(temp.getTitle());
+            }
+            if(temp.getDirector() != null)
+            {
+                movie.setDirector(temp.getDirector());
+            }
+            if(temp.getYear() != 0)
+            {
+                movie.setYear(temp.getYear());
+            }
+            if (temp.getLanguage() != null)
+            {
+                movie.setLanguage(temp.getLanguage());
+            }
+            movieRepository.save(movie);
+            return objectMapper.writeValueAsString(movie);
+        }
+        else
+        {
+            return "Movie not found";
+        }
+
+    } //update movie closing
+
+
+    @Modifying
+    @DeleteMapping("/delete/{ID}")
+    public String deleteMovieById(@PathVariable int ID) throws JsonProcessingException {
+        List<Movie> movies = movieRepository.findByID(ID);
+        if(movies.size() != 0){
+            movieRepository.deleteByID(ID);
+            return objectMapper.writeValueAsString(movies.get(0));
+        }
+        String error = "{\"Error\": \"Movie id does not exist\"}";
+        return objectMapper.writeValueAsString(objectMapper.readTree(error));
     }
 
 }

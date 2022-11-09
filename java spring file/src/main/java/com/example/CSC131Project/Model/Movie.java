@@ -15,8 +15,8 @@ import static javax.persistence.GenerationType.IDENTITY;
 public class Movie {
     @Id
     //@GeneratedValue(strategy = GenerationType.AUTO)
-    @GeneratedValue(strategy = IDENTITY)
-    private int id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int ID;
     private String movieID;
     private String title;
     private String director;
@@ -37,7 +37,7 @@ public class Movie {
 
 
     public int getid(){
-        return id;
+        return ID;
     }
 
     public String getMovieID(){
