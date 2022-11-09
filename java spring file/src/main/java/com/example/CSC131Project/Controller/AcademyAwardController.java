@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.*;
 
 @RestController
-@Component
-@Service
+//@Component
+//@Service
 @RequestMapping("/academyAward")
 public class AcademyAwardController
 {

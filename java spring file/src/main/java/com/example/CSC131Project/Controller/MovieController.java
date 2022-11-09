@@ -10,6 +10,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
@@ -18,8 +19,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@Component
-@Service
+//@Component
+//@Service
 @RequestMapping("/movies")
 public class MovieController
 {
