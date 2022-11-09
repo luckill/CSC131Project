@@ -1,42 +1,43 @@
 package com.example.CSC131Project.Model;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Table;
 
+import static javax.persistence.GenerationType.IDENTITY;
 
 
 @Entity
-public class Movie{
+@Table(name="movie")
+
+public class Movie {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int ID;
-    @JsonProperty("imdbID")
+    //@GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = IDENTITY)
+    private int id;
     private String movieID;
-    @JsonProperty("Title")
     private String title;
-    @JsonProperty("Director")
     private String director;
-    @JsonProperty("Year")
     private int year;
-    @JsonProperty("Language")
     private String language;
 
-     public Movie(){
+    public Movie(){
     }//Default Constructor
     public Movie(String M, String T, String D, int Y, String L){
-         movieID = M;
-         title = T;
-         director = D;
-         year = Y;
-         language = L;
+        super();
+        //this.id=id;
+        movieID = M;
+        title = T;
+        director = D;
+        year = Y;
+        language = L;
     }//Constructor
 
-    public int getID(){
-         return ID;
+
+    public int getid(){
+        return id;
     }
 
     public String getMovieID(){
