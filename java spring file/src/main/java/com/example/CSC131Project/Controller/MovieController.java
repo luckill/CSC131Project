@@ -9,9 +9,6 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.Modifying;
-import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Controller;
-import org.springframework.stereotype.Service;
 
 import org.springframework.web.bind.annotation.*;
 
@@ -21,11 +18,15 @@ import java.util.List;
 @RequestMapping("/movies")
 public class MovieController
 {
+    private final ApiConfiguration apiConfiguration;
     @Autowired
     public MovieRepository movieRepository;
     ApiCommunicator iMDBApi = new ApiCommunicator();
     ObjectMapper objectMapper = new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-
+    public MovieController(ApiConfiguration apiConfiguration)
+    {
+        this.apiConfiguration = apiConfiguration;
+    }
     @GetMapping("/getMovieById/{movieId}")
     public String getMovieById(@PathVariable String movieId)
     {
@@ -36,11 +37,11 @@ public class MovieController
 
     public String getMovieByTitle(@PathVariable String title) throws JsonProcessingException {
         List<Movie> movies = movieRepository.findByTitle(title);
-        if (movies.size() != 0) {
+        if (movies.size() != 0)
+        {
             return objectMapper.writeValueAsString(movies.get(0));
         }
-        //String json = iMDBApi.getRequest(title, apiConfiguration.AuthorizeToke());
-        String json = iMDBApi.getRequest(title, "d860e921");
+        String json = iMDBApi.getRequest(title, apiConfiguration.AuthorizeToke());
         if (!json.contains("Movie not found!")) {
             Movie thisMovie = objectMapper.readValue(json, Movie.class);
             thisMovie = movieRepository.save(thisMovie);
