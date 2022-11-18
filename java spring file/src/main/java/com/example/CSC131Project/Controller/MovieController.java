@@ -18,7 +18,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/movies")
+@Service
+@RequestMapping("/moviesApi")
 public class MovieController
 {
     @Autowired
@@ -27,10 +28,13 @@ public class MovieController
     ObjectMapper objectMapper = new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
     @GetMapping("/getMovieById/{movieId}")
-    public String getMovieById(@PathVariable String movieId)
-    {
-        //placeholder, replace with your code
-        return "";
+    public String getMovieById(@PathVariable int movieId) throws JsonProcessingException {
+        List<Movie> movies = movieRepository.findByID(movieId);
+        if (movies.size() != 0) {
+            return objectMapper.writeValueAsString(movies.get(0));
+        }
+        String error = "{\"Error\": \"Movie id does not exist\"}";
+        return objectMapper.writeValueAsString(objectMapper.readTree(error));
     }
     @GetMapping("/getMovieByTitle/{title}")
 

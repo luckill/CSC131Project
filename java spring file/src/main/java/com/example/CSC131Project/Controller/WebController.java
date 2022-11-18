@@ -33,8 +33,7 @@ public class WebController {
     }
     @GetMapping("/search")
     public String search(Model model){
-        //Movie movie = movieRepository.find1Movie()
-        model.addAttribute("movie",new Movie());
+        model.addAttribute("Title",new Movie());
         return "search";
     }
     @GetMapping("/searchResult")
@@ -48,4 +47,5 @@ public class WebController {
         movieRepository.save(m);
         return "redirect:/list";
     }
+
 }
