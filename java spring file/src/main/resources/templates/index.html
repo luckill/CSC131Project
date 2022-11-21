@@ -8,30 +8,34 @@
 
 <body>
 <div class="container mt-4">
-    <a th:href="@{/new}" class="btn btn-primary"  > New </a>
     <table class="table">
-        <h1> Movie List</h1>
-        <thead>
-        <tr>
-            <th>ID</th>
-            <th>title</th>
-            <th>year</th>
-            <th>Language</th>
-            <th>director</th>
-        </tr>
-
-        </thead>
+        <h1> Movie API Project</h1>
         <tbody>
-        <tr th:each="movie:${movies}">
-
-            <td th:text="${movie.movieID}"></td>
-            <td th:text="${movie.title}"></td>
-            <td th:text="${movie.year}"></td>
-            <td th:text="${movie.language}"></td>
-            <td th:text="${movie.director}"></td>
+        <tr>
             <td>
-                <a class="btn btn-warning">Edit</a>
-                <a class="btn btn-danger">delete</a>
+                <form th:action="@{/listAllMovies}" class="btn btn-primary">
+                <button type="submit">List All Movies</button>
+                </form>
+            </td>
+            <td>
+                <form th:action="@{/addMovie}" class="btn btn-primary">
+                <button type="submit">Add a Movie</button>
+                </form>
+            </td>
+            <td>
+                <form th:action="@{/searchForAMovie}" class="btn btn-primary">
+                    <button type="submit">Search</button>
+                </form>
+            </td>
+            <td>
+                <form th:action="@{/searchForAMovie}" class="btn btn-primary">
+                    <button type="submit">Edit Movie</button>
+                </form>
+            </td>
+            <td>
+                <form th:action="@{/searchForAMovie}" class="btn btn-primary">
+                    <button type="submit">Delete Movie</button>
+                </form>
             </td>
         </tr>
         </tbody>

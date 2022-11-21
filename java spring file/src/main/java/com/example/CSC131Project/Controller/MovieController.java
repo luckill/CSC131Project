@@ -10,6 +10,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.Modifying;
 
+import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -38,7 +39,6 @@ public class MovieController
         return objectMapper.writeValueAsString(objectMapper.readTree(error));
     }
     @GetMapping("/getMovieByTitle/{title}")
-
     public String getMovieByTitle(@PathVariable String title) throws JsonProcessingException {
         List<Movie> movies = movieRepository.findByTitle(title);
         if (movies.size() != 0)
