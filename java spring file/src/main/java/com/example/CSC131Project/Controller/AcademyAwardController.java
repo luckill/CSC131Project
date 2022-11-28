@@ -2,13 +2,18 @@ package com.example.CSC131Project.Controller;
 
 import com.example.CSC131Project.ApiConfiguration;
 import com.example.CSC131Project.Model.*;
-import org.json.simple.*;
-import org.json.simple.parser.*;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.*;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.*;
 
-@RestController
+@Controller
 //@Component
 //@Service
 @RequestMapping("/academyAward")
@@ -17,56 +22,96 @@ public class AcademyAwardController
     @Autowired
     public MovieRepository movieRepository;
     private final ApiConfiguration apiConfiguration;
+    ObjectMapper objectMapper = new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
     public AcademyAwardController(ApiConfiguration apiConfiguration)
     {
         this.apiConfiguration = apiConfiguration;
     }
 
-    @GetMapping("/actor/{year}")
-    public String FindActorAwardByYear(@PathVariable("year") int year)
+
+
+    @GetMapping("/actor")
+    public String FindActorAwardByYear(@RequestParam("year") String year, Model model)
     {
         String result = "";
+        int awardYear = Integer.parseInt(year);
+        List<AcademyAward> awardList = AppStartUpListener.dataMap.
+                values().
+                stream().
+                filter(academyAward -> academyAward.getYearOfAward() == awardYear && academyAward.isWinner() && academyAward.getCategory().contains("ACTOR")).
+                toList();
+        //JSONArray array = new JSONArray();
+        model.addAttribute("actorAwardList", awardList);
+
+        model.addAttribute("movies", filmProcessor(awardList));
+        //result = array.toJSONString();
+        return "/academyAward/actorAndBestPicture";
+    }
+
+    @GetMapping("AwardWinnerAndNominee")
+    public String getAwardWinnerAndNomineeByYear(@RequestParam("year") int year, Model model) {
+        List<AcademyAward> awardList = AppStartUpListener.dataMap.values().stream().filter(academyAward -> academyAward.getYearOfAward() == year).toList();
+        List<AcademyAward> winnerList = new ArrayList<>();
+        List<AcademyAward> nomineeList = new ArrayList<>();
+        model.addAttribute("bestPictureAwardList", awardList);
+        /*JSONArray array = new JSONArray();
+        JSONArray nominee = new JSONArray();
+        JSONArray winner = new JSONArray();*/
+        for (AcademyAward award : awardList)
+        {
+            /*JSONObject obj = new JSONObject();
+            obj.put("Award", s.getCategory());
+            obj.put("Year", s.getYearOfAward());
+            obj.put("film tile", s.getFilm());*/
+
+            if (award.isWinner())
+            {
+                //winner.add(obj);
+                winnerList.add(award);
+            }
+            else
+            {
+                nomineeList.add(award);
+            }
+        }
+        model.addAttribute("winners", winnerList);
+        model.addAttribute("nominees", nomineeList);
+        //array.add(winner);
+        //array.add(nominee);
+        //return array.toJSONString();
+        return "/academyAward/awardWinnerAndNominee";
+    }
+
+    private List<Movie> filmProcessor(List<AcademyAward> awardList)
+    {
+        //JSONArray array = new JSONArray();
+        List<Movie> movieList = new ArrayList<>();
         try
         {
-            List<AcademyAward> awardList = AppStartUpListener.dataMap.
-                    values().
-                    stream().
-                    filter(academyAward -> academyAward.getYearOfAward() == year && academyAward.isWinner() && academyAward.getCategory().contains("ACTOR")).
-                    toList();
-            JSONArray array = new JSONArray();
-
             for (AcademyAward s : awardList)
             {
                 String title = s.getFilm();
-                JSONObject obj = new JSONObject();
+                /*JSONObject obj = new JSONObject();
                 JSONObject movieObj = new JSONObject();
                 obj.put("Award", s.getCategory());
                 obj.put("Year", s.getYearOfAward());
-                obj.put("film tile", s.getFilm());
-                array.add(obj);
-                if (movieRepository.findByTitle(title).isEmpty())
+                obj.put("film tile", s.getFilm());*/
+                //array.add(obj);
+                List<Movie> list = movieRepository.findByTitle(title);
+                if (list.isEmpty())
                 {
                     ApiCommunicator communicator = new ApiCommunicator();
                     String temp = communicator.getRequest(title, apiConfiguration.AuthorizeToke());
-                    JSONParser parser = new JSONParser();
-                    JSONObject json = (JSONObject) parser.parse(temp);
-
-                    String filmTitle = (String) json.get("Title");
-                    String director = (String) json.get("Director");
-                    String language = (String) json.get("Language");
-                    String movieID = (String) json.get("imdbID");
-                    int yearOfFilm = Integer.parseInt((String)json.get("Year"));
-                    movieObj.put("title", filmTitle);
-                    movieObj.put("Director", director);
-                    movieObj.put("Language", language);
-                    movieObj.put("imdbID", movieID);
-                    movieObj.put("Year", yearOfFilm);
-
-                    Movie movie = new Movie(movieID, filmTitle, director, yearOfFilm, language);
+                    Movie movie = objectMapper.readValue(temp, Movie.class);
                     movieRepository.save(movie);
+                    movieList.add(movie);
                 }
                 else
+                {
+                    movieList.addAll(list);
+                }
+                /*else
                 {
                     List<Movie> movieList = movieRepository.findByTitle(title);
                     for(Movie movie: movieList)
@@ -78,44 +123,24 @@ public class AcademyAwardController
                         movieObj.put("Year", movie.getYear());
                     }
                 }
-                array.add(movieObj);
+                array.add(movieObj);*/
             }
-            result = array.toJSONString();
+
+        //List<Movie> movieList = (List<Movie>)movieRepository.findAll();
+            //result = array.toJSONString();
         }
-        catch (ParseException ex)
+        catch (JsonMappingException ex)
         {
             ex.printStackTrace();
         }
-        return result;
-    }
-
-    @GetMapping("AwardWinnerAndNominee/{year}")
-    public String getAwardWinnerAndNomineeByYear(@PathVariable("year") int year)
-    {
-        List<AcademyAward> awardList = AppStartUpListener.dataMap.values().stream().filter(academyAward -> academyAward.getYearOfAward() == year).toList();
-        JSONArray array = new JSONArray();
-        JSONArray nominee = new JSONArray();
-        JSONArray winner = new JSONArray();
-        for (AcademyAward s: awardList)
+        catch (JsonProcessingException e)
         {
-            JSONObject obj = new JSONObject();
-            obj.put("Award", s.getCategory());
-            obj.put("Year", s.getYearOfAward());
-            obj.put("film tile", s.getFilm());
-
-            if (s.isWinner())
-            {
-                winner.add(obj);
-            }
-            else
-            {
-                nominee.add(obj);
-            }
+            throw new RuntimeException(e);
         }
-        array.add(winner);
-        array.add(nominee);
-        return array.toJSONString();
+        return movieList;
     }
+
 }
+
 
 

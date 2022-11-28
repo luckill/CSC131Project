@@ -40,11 +40,7 @@ public class WebController {
         return "list_of_all_movies";
     }
 
-    @GetMapping("/addMovie")
-    public String addMovie(Model model){
-        model.addAttribute("movie",new Movie());
-        return "add_form";
-    }
+
     @GetMapping("/searchForAMovie")
     public String searchMovie(Model model){
         model.addAttribute("movie", new Movie());
@@ -68,12 +64,7 @@ public class WebController {
         }
         return "result";
     }
-    @PostMapping("/editMovieForm")
-    public String editMovieForm(@Valid Movie editedMovie, Model model){
-        Movie movie = movieRepository.find1Movie(editedMovie.getTitle());
-        model.addAttribute("movie",movie);
-        return "edit_movie_form";
-    }
+
     @PostMapping("/editMovie")
     public String editMovie(@Valid Movie editedMovie, Model model) {
         Movie movie = movieRepository.find1MovieByIMBDId(editedMovie.getMovieID());
