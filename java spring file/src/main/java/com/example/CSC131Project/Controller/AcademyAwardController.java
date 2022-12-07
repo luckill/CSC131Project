@@ -2,15 +2,16 @@ package com.example.CSC131Project.Controller;
 
 import com.example.CSC131Project.ApiConfiguration;
 import com.example.CSC131Project.Model.*;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.core.*;
+import com.fasterxml.jackson.databind.*;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.*;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.*;
 
+import javax.validation.*;
 import java.util.*;
 
 @Controller
@@ -29,13 +30,20 @@ public class AcademyAwardController
         this.apiConfiguration = apiConfiguration;
     }
 
-
-
     @GetMapping("/actor")
-    public String FindActorAwardByYear(@RequestParam("year") String year, Model model)
+    public String FindActorAwardByYear(@RequestParam("year") String year, Model model, @Valid AcademyAwardForm academyAwardForm, BindingResult bindingResult)
     {
-        String result = "";
         int awardYear = Integer.parseInt(year);
+        /*if (awardYear < 1928 || awardYear > 2020 )
+        {
+            //redirectAttributes.addFlashAttribute("error", "No academy award data fro specific award year found!!!");
+            //return "redirect:index";
+        }*/
+
+        if (bindingResult.hasErrors())
+        {
+            return "academyAward/academyAwardForm";
+        }
         List<AcademyAward> awardList = AppStartUpListener.dataMap.
                 values().
                 stream().
