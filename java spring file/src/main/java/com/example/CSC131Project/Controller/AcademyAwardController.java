@@ -5,13 +5,9 @@ import com.example.CSC131Project.Model.*;
 import com.fasterxml.jackson.core.*;
 import com.fasterxml.jackson.databind.*;
 import org.springframework.beans.factory.annotation.*;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.validation.*;
+import org.springframework.stereotype.*;
+import org.springframework.ui.*;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.support.*;
-
-import javax.validation.*;
 import java.util.*;
 
 @Controller
@@ -31,23 +27,19 @@ public class AcademyAwardController
     }
 
     @GetMapping("/actor")
-    public String FindActorAwardByYear(@RequestParam("year") String year, Model model, @Valid AcademyAwardForm academyAwardForm, BindingResult bindingResult)
+    public String FindActorAwardByYear(@RequestParam("year") int year, Model model)
     {
-        int awardYear = Integer.parseInt(year);
-        /*if (awardYear < 1928 || awardYear > 2020 )
+        //int awardYear = Integer.parseInt(year);
+        if (year < 1928 || year > 2020 )
         {
-            //redirectAttributes.addFlashAttribute("error", "No academy award data fro specific award year found!!!");
-            //return "redirect:index";
-        }*/
-
-        if (bindingResult.hasErrors())
-        {
-            return "academyAward/academyAwardForm";
+                model.addAttribute("errorMessage","Invalid Year!!! - no best actor award data from this year");
+                return "/academyAward/academyAwardForm";
         }
+
         List<AcademyAward> awardList = AppStartUpListener.dataMap.
                 values().
                 stream().
-                filter(academyAward -> academyAward.getYearOfAward() == awardYear && academyAward.isWinner() && academyAward.getCategory().contains("ACTOR")).
+                filter(academyAward -> academyAward.getYearOfAward() == year && academyAward.isWinner() && academyAward.getCategory().contains("ACTOR")).
                 toList();
         //JSONArray array = new JSONArray();
         model.addAttribute("actorAwardList", awardList);
@@ -59,6 +51,11 @@ public class AcademyAwardController
 
     @GetMapping("AwardWinnerAndNominee")
     public String getAwardWinnerAndNomineeByYear(@RequestParam("year") int year, Model model) {
+        if (year < 1928 || year > 2020 )
+        {
+            model.addAttribute("errorMessage","Invalid Year!!! - no academy award data from this year");
+            return "/academyAward/academyAwardForm";
+        }
         List<AcademyAward> awardList = AppStartUpListener.dataMap.values().stream().filter(academyAward -> academyAward.getYearOfAward() == year).toList();
         List<AcademyAward> winnerList = new ArrayList<>();
         List<AcademyAward> nomineeList = new ArrayList<>();
