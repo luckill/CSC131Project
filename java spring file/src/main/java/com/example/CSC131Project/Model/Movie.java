@@ -43,7 +43,7 @@ public class Movie {
     }//Constructor
 
 
-    public int getid(){
+    public int getID(){
         return ID;
     }
 

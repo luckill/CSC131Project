@@ -30,6 +30,7 @@
             <td th:text="${movie.director}"></td>
             <td>
                 <form th:action="@{/editMovieForm}" th:object=${movie2} method="post">
+                    <input type="hidden" name="ID" th:value="${movie.ID}">
                     <input type="hidden" name="movieID" th:value="${movie.movieID}">
                     <input type="hidden" name="title" th:value="${movie.title}">
                     <input type="hidden" name="year" th:value="${movie.year}">
@@ -38,6 +39,7 @@
                     <button type="submit">Edit</button>
                 </form>
                 <form th:action="@{/deleteAMovie}" th:object=${movie2} method="post">
+                    <input type="hidden" name="ID" th:value="${movie.ID}">
                     <input type="hidden" name="movieID" th:value="${movie.movieID}">
                     <input type="hidden" name="title" th:value="${movie.title}">
                     <input type="hidden" name="year" th:value="${movie.year}">

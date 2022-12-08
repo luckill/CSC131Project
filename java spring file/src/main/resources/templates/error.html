@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Movie List</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
+</head>
+
+<body>
+<div class="container mt-4">
+  <a th:href="@{/addMovie}" class="btn btn-primary"  > New </a>
+  <table class="table">
+    <h1> Error</h1>
+    <tbody>
+    <tr>
+      <td th:text="${error}"></td>
+      <td>
+        <form th:action="@{/}" th:object=${movie2} method="get">
+          <button type="submit">Home</button>
+        </form>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+
+</body>
+</html>
