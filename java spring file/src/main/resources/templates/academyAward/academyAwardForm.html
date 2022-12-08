@@ -11,16 +11,31 @@
 </head>
 <body>
 <div class="container">
+    <div class="alert alert-danger alert-dismissible fade show" th:if="${errorMessage}">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        <p th:text="${errorMessage}"></p>
+    </div>
     <form>
-        <input type="text" name="year" value="0" pattern="\d*">
-        <div class="dropdown">
-            <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
-                choose academy award type
-            </button>
-            <div class="dropdown-menu">
-                <button class="dropdown-item" type="submit" formaction="/academyAward/actor">best actor award</button>
-                <button class="dropdown-item" type="submit" formaction="">best picture award</button>
-                <button class="dropdown-item" type="submit" formaction="/academyAward/AwardWinnerAndNominee">winners and nominees for the year</button>
+        <div class="card">
+            <div class="card-header">
+                Enter the year for the academy award
+            </div>
+
+            <div class="card-body">
+                <input type="text" name="year" pattern="\d*">
+            </div>
+
+            <div class="card-footer">
+                <div class="dropdown">
+                    <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+                        choose academy award type
+                    </button>
+                    <div class="dropdown-menu">
+                        <button class="dropdown-item" type="submit" formaction="/academyAward/actor">best actor award</button>
+                        <button class="dropdown-item" type="submit" formaction="">best picture award</button>
+                        <button class="dropdown-item" type="submit" formaction="/academyAward/AwardWinnerAndNominee">winners and nominees for the year</button>
+                    </div>
+                </div>
             </div>
         </div>
     </form>

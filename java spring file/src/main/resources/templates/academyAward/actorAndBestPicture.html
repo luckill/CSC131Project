@@ -10,6 +10,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script></head>
 <body>
     <div class="container">
+        <div class="alert alert-danger" role="alert" th:text="${error}" th:if="${error}"></div>
         <h3> Academy award List</h3>
         <table class = "table table-bordered table table-striped">
             <thead>
