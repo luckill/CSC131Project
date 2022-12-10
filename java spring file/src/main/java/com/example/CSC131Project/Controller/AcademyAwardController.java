@@ -88,7 +88,7 @@ public class AcademyAwardController
         return "/academyAward/awardWinnerAndNominee";
     }
 
-    @GetMapping("BestPictureByYear") //Aaron finish this one xD
+    @GetMapping("BestPictureByYear")
     public String OscarBestPictureByYear(@RequestParam("year") int year, Model model)
     {
 
@@ -103,7 +103,7 @@ public class AcademyAwardController
                 stream().
                 filter(academyAward -> academyAward.getYearOfAward() == year && academyAward.isWinner() && academyAward.getCategory().contains("BEST MOTION PICTURE")).
                 toList();
-        if(awardList == null)
+        if(awardList.isEmpty())
         {
             String error = "None Found";
             model.addAttribute("error", error);
@@ -117,7 +117,7 @@ public class AcademyAwardController
         return "/academyAward/actorAndBestPicture";
     }
 
-
+    
 
 
     private List<Movie> filmProcessor(List<AcademyAward> awardList)
