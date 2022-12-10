@@ -2,7 +2,11 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+<<<<<<< HEAD
       <module fileurl="file://$PROJECT_DIR$/.idea/CSC131Project.iml" filepath="$PROJECT_DIR$/.idea/CSC131Project.iml" />
+=======
+      <module fileurl="file://$PROJECT_DIR$/java spring file/CSC131Project.iml" filepath="$PROJECT_DIR$/java spring file/CSC131Project.iml" />
+>>>>>>> a61a8b2a4a4441bf83056e3cb1f8ba4feb860d97
     </modules>
   </component>
 </project>

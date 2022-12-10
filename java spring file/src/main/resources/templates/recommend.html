@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Movie List</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
+</head>
+
+<body>
+<div class="container mt-4">
+  <a th:href="@{/addMovie}" class="btn btn-primary"  > New </a>
+  <table class="table">
+    <h1> Movie List</h1>
+    <thead>
+    <tr>
+      <th>ID</th>
+      <th>title</th>
+      <th>year</th>
+      <th>Language</th>
+      <th>director</th>
+    </tr>
+
+    </thead>
+    <tbody>
+    <tr>
+      <td th:text="${movie.movieID}"></td>
+      <td th:text="${movie.title}"></td>
+      <td th:text="${movie.year}"></td>
+      <td th:text="${movie.language}"></td>
+      <td th:text="${movie.director}"></td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+<form th:action="@{/recommendAnother}" th:object=${movies} method="post">
+  <button type="submit">Edit</button>
+</form>
+
+</body>
+</html>
