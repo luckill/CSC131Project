@@ -1,30 +1,20 @@
 <!-- White with black text -->
-<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+<nav th:fragment = "DarkNavBar" class="navbar navbar-expand-sm bg-dark navbar-dark">
   <ul class="navbar-nav">
     <li class="nav-item">
-	<form th:action="@{/}" class="btn btn-primary">
-	<button type="submit">Home</button>
-	</form>
+	<a class="nav-link" href="@{/}">Main</a>
 	</li>
     <li class="nav-item">
-      <form th:action="@{/listAllMovies}" class="btn btn-primary">
-      <button type="submit">List All Movies</button>
-      </form>
+      <a class="nav-link" href="@{/Movie/listAllMovies}">List All Movies</a>
     </li>
     <li class="nav-item">
-      <form th:action="@{/addMovie}" class="btn btn-primary">
-      <button type="submit">Add a Movie</button>
-      </form>
+      <a class="nav-link" href="@{/Movie/addMovie}">Add a Movie</a>
     </li>
     <li class="nav-item">
-      <form th:action="@{/searchForAMovie}" class="btn btn-primary">
-      <button type="submit">Search</button>
-      </form>
+      <a class="nav-link" href="@{/Movie/searchForAMovie}">Search for a Movie</a>
     </li>
-	<li class="nav-item active">
-      <form th:action="@{/academyAward/findaward}" class="btn btn-primary" method="GET">
-      <button type="submit">get academy award</button>
-      </form>
+	<li class="nav-item">
+      <a class="nav-link" href="@{/academyAward/findaward}">Get Academy Award</a>
     </li>
   </ul>
 </nav>
