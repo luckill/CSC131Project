@@ -1,5 +1,6 @@
 package com.example.CSC131Project.Controller;
 
+
 import com.example.CSC131Project.ApiConfiguration;
 import com.example.CSC131Project.Model.*;
 import com.fasterxml.jackson.core.*;
@@ -42,6 +43,7 @@ public class AcademyAwardController
                 filter(academyAward -> academyAward.getYearOfAward() == year && academyAward.isWinner() && academyAward.getCategory().contains("ACTOR")).
                 toList();
         //JSONArray array = new JSONArray();
+
         model.addAttribute("actorAwardList", awardList);
 
         model.addAttribute("movies", filmProcessor(awardList));

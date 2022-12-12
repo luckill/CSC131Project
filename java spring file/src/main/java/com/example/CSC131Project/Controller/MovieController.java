@@ -144,6 +144,7 @@ public class MovieController {
         return "recommend";
     }
 
+
     public String createUniqueId(Movie movie)
     {
         Random random = new Random();
