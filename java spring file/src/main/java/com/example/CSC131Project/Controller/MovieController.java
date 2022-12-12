@@ -37,7 +37,7 @@ public class MovieController {
         if (movie != null)
         {
             model.addAttribute("movie",movie);
-            return "result";
+            return "/Movie/result";
         }
         else
         {
@@ -87,20 +87,13 @@ public class MovieController {
             movie = movieRepository.save(movie);
             model.addAttribute("movie",movie);
         }
-        return "result";
+        return "/Movie/result";
     }
     @PostMapping("/deleteAMovie")
     public String deleteAMovie(@Valid Movie deleteMovie, Model model){
         movieRepository.deleteByTitle(deleteMovie.getTitle());
         model.addAttribute("movie", deleteMovie);
         return "redirect:/listAllMovies";
-    }
-
-    @PostMapping("/editMovieForm")
-    public String editMovieForm(@Valid Movie editedMovie, Model model){
-        Movie movie = movieRepository.find1Movie(editedMovie.getTitle());
-        model.addAttribute("movie",movie);
-        return "edit_movie_form";
     }
 
     @PostMapping("/saveAMovie")
@@ -130,7 +123,7 @@ public class MovieController {
     public String list(Model model) throws JsonProcessingException {
         List<Movie> movies =movieRepository.list();
         model.addAttribute("movies",movies);
-        return "list_of_all_movies";
+        return "/Movie/list_of_all_movies";
     }
 
     @GetMapping("/recommend")
@@ -141,7 +134,7 @@ public class MovieController {
         movies.remove(movie);
         model.addAttribute("movies",movies);
         model.addAttribute("movie",movie);
-        return "recommend";
+        return "/Movie/recommend";
     }
 
     public String createUniqueId(Movie movie)
