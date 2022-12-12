@@ -90,6 +90,38 @@ public class AcademyAwardController
         return "/academyAward/awardWinnerAndNominee";
     }
 
+    @GetMapping("BestPictureByYear")
+    public String OscarBestPictureByYear(@RequestParam("year") int year, Model model)
+    {
+
+        if (year < 1928 || year > 2020 )
+        {
+            model.addAttribute("errorMessage","Invalid Year!!! - no best actor award data from this year");
+            return "/academyAward/academyAwardForm";
+        }
+
+        List<AcademyAward> awardList = AppStartUpListener.dataMap.
+                values().
+                stream().
+                filter(academyAward -> academyAward.getYearOfAward() == year && academyAward.isWinner() && academyAward.getCategory().contains("BEST MOTION PICTURE")).
+                toList();
+        if(awardList.isEmpty())
+        {
+            String error = "None Found";
+            model.addAttribute("error", error);
+            return "error";
+        }
+
+        model.addAttribute("actorAwardList", awardList);
+
+        model.addAttribute("movies", filmProcessor(awardList));
+
+        return "/academyAward/actorAndBestPicture";
+    }
+
+    
+
+
     private List<Movie> filmProcessor(List<AcademyAward> awardList)
     {
         //JSONArray array = new JSONArray();
