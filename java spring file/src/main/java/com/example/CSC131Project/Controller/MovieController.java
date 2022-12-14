@@ -54,7 +54,7 @@ public class MovieController {
                 thisMovie = movieRepository.save(thisMovie);
 
                 model.addAttribute("movie", thisMovie);
-                return "result";
+                return "/Movie/result";
             }
         }
         String error =  "No such movie does not exist";
