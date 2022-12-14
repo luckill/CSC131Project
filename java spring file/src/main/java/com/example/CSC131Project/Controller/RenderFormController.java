@@ -34,6 +34,6 @@ public class RenderFormController
     @GetMapping("/searchForAMovie")
     public String searchMovie(Model model){
         model.addAttribute("movie", new Movie());
-        return "search";
+        return "/Movie/search";
     }
 }
