@@ -43,7 +43,17 @@ public class MovieController {
         {
             String json = iMDBApi.getRequest(inputMovie.getTitle(), apiConfiguration.AuthorizeToke());
             if (!json.contains("Movie not found!")) {
-                Movie thisMovie = objectMapper.readValue(json, Movie.class);
+                Movie thisMovie = new Movie();
+                try{
+                    thisMovie = objectMapper.readValue(json, Movie.class);
+                }
+                catch (Exception e)
+                {
+                    String error =  "No such movie exist";
+                    model.addAttribute("error", error);
+                    return "error";
+                }
+
                 Movie tempMovie = movieRepository.find1MovieByIMBDId(thisMovie.getMovieID());
                 while(tempMovie != null && thisMovie.getMovieID() == tempMovie.getMovieID())
                 {
@@ -57,7 +67,7 @@ public class MovieController {
                 return "/Movie/result";
             }
         }
-        String error =  "No such movie does not exist";
+        String error =  "No such movie exist";
         model.addAttribute("error", error);
         return "error";
     }
@@ -87,7 +97,7 @@ public class MovieController {
             movie = movieRepository.save(movie);
             model.addAttribute("movie",movie);
         }
-        return "result";
+        return "/Movie/result";
     }
     @PostMapping("/deleteAMovie")
     public String deleteAMovie(@Valid Movie deleteMovie, Model model){
@@ -96,16 +106,9 @@ public class MovieController {
         return "redirect:/listAllMovies";
     }
 
-    @PostMapping("/editMovieForm")
-    public String editMovieForm(@Valid Movie editedMovie, Model model){
-        Movie movie = movieRepository.find1Movie(editedMovie.getTitle());
-        model.addAttribute("movie",movie);
-        return "edit_movie_form";
-    }
-
     @PostMapping("/saveAMovie")
     public String saveAMovie(@Valid Movie saveMovie, Model model) throws JsonProcessingException {
-        if(saveMovie.getTitle() == "")
+        if(saveMovie.getTitle().equals(""))
         {
             String error = "Cannot add without a Title";
             model.addAttribute("error", error);
@@ -130,7 +133,7 @@ public class MovieController {
     public String list(Model model) throws JsonProcessingException {
         List<Movie> movies =movieRepository.list();
         model.addAttribute("movies",movies);
-        return "list_of_all_movies";
+        return "/Movie/list_of_all_movies";
     }
 
     @GetMapping("/recommend")
@@ -141,7 +144,7 @@ public class MovieController {
         movies.remove(movie);
         model.addAttribute("movies",movies);
         model.addAttribute("movie",movie);
-        return "recommend";
+        return "/Movie/recommend";
     }
 
 
@@ -154,5 +157,12 @@ public class MovieController {
             id = "ff" + String.format("%07d", random.nextInt(10000));
         }
         return id;
+    }
+
+    @PostMapping("/editMovieForm")
+    public String editMovieForm(@Valid Movie editedMovie, Model model){
+        Movie movie = movieRepository.find1Movie(editedMovie.getTitle());
+        model.addAttribute("movie",movie);
+        return "/Movie/edit_movie_form";
     }
 }

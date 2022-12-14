@@ -42,12 +42,10 @@ public class AcademyAwardController
                 stream().
                 filter(academyAward -> academyAward.getYearOfAward() == year && academyAward.isWinner() && academyAward.getCategory().contains("ACTOR")).
                 toList();
-        //JSONArray array = new JSONArray();
 
         model.addAttribute("actorAwardList", awardList);
 
         model.addAttribute("movies", filmProcessor(awardList));
-        //result = array.toJSONString();
         return "/academyAward/actorAndBestPicture";
     }
 
@@ -58,23 +56,18 @@ public class AcademyAwardController
             model.addAttribute("errorMessage","Invalid Year!!! - no academy award data from this year");
             return "/academyAward/academyAwardForm";
         }
-        List<AcademyAward> awardList = AppStartUpListener.dataMap.values().stream().filter(academyAward -> academyAward.getYearOfAward() == year).toList();
+        List<AcademyAward> awardList = AppStartUpListener.dataMap.
+                values().
+                stream().
+                filter(academyAward -> academyAward.getYearOfAward() == year).
+                toList();
         List<AcademyAward> winnerList = new ArrayList<>();
         List<AcademyAward> nomineeList = new ArrayList<>();
         model.addAttribute("bestPictureAwardList", awardList);
-        /*JSONArray array = new JSONArray();
-        JSONArray nominee = new JSONArray();
-        JSONArray winner = new JSONArray();*/
         for (AcademyAward award : awardList)
         {
-            /*JSONObject obj = new JSONObject();
-            obj.put("Award", s.getCategory());
-            obj.put("Year", s.getYearOfAward());
-            obj.put("film tile", s.getFilm());*/
-
             if (award.isWinner())
             {
-                //winner.add(obj);
                 winnerList.add(award);
             }
             else
@@ -84,9 +77,6 @@ public class AcademyAwardController
         }
         model.addAttribute("winners", winnerList);
         model.addAttribute("nominees", nomineeList);
-        //array.add(winner);
-        //array.add(nominee);
-        //return array.toJSONString();
         return "/academyAward/awardWinnerAndNominee";
     }
 
@@ -103,11 +93,11 @@ public class AcademyAwardController
         List<AcademyAward> awardList = AppStartUpListener.dataMap.
                 values().
                 stream().
-                filter(academyAward -> academyAward.getYearOfAward() == year && academyAward.isWinner() && academyAward.getCategory().contains("BEST MOTION PICTURE")).
+                filter(academyAward -> academyAward.getYearOfAward() == year && academyAward.isWinner() && (academyAward.getCategory().contains("BEST PICTURE") || academyAward.getCategory().contains("BEST MOTION PICTURE"))).
                 toList();
         if(awardList.isEmpty())
         {
-            String error = "None Found";
+            String error = "no related academy award data";
             model.addAttribute("error", error);
             return "error";
         }
@@ -119,24 +109,32 @@ public class AcademyAwardController
         return "/academyAward/actorAndBestPicture";
     }
 
-    
-
+    @GetMapping("searchActor")
+    public String searchActor(@RequestParam String actorFirstName, @RequestParam String actorLastName, Model model)
+    {
+        String actorName = actorFirstName +  " " + actorLastName;
+        List<AcademyAward> awardList = AppStartUpListener.dataMap.
+                values().
+                stream().
+                filter(academyAward -> academyAward.getName().equalsIgnoreCase(actorName) || academyAward.getName().contains(actorName)).
+                toList();
+        if(awardList.isEmpty())
+        {
+            model.addAttribute("message","No related academy award data found!!!");
+            return "/academyAward/searchActorForm";
+        }
+        model.addAttribute("awardList", awardList);
+        return "/academyAward/searchActor";
+    }
 
     private List<Movie> filmProcessor(List<AcademyAward> awardList)
     {
-        //JSONArray array = new JSONArray();
         List<Movie> movieList = new ArrayList<>();
         try
         {
             for (AcademyAward s : awardList)
             {
                 String title = s.getFilm();
-                /*JSONObject obj = new JSONObject();
-                JSONObject movieObj = new JSONObject();
-                obj.put("Award", s.getCategory());
-                obj.put("Year", s.getYearOfAward());
-                obj.put("film tile", s.getFilm());*/
-                //array.add(obj);
                 List<Movie> list = movieRepository.findByTitle(title);
                 if (list.isEmpty())
                 {
@@ -150,23 +148,7 @@ public class AcademyAwardController
                 {
                     movieList.addAll(list);
                 }
-                /*else
-                {
-                    List<Movie> movieList = movieRepository.findByTitle(title);
-                    for(Movie movie: movieList)
-                    {
-                        movieObj.put("title", movie.getTitle());
-                        movieObj.put("Director", movie.getDirector());
-                        movieObj.put("Language", movie.getLanguage());
-                        movieObj.put("imdbID", movie.getMovieID());
-                        movieObj.put("Year", movie.getYear());
-                    }
-                }
-                array.add(movieObj);*/
             }
-
-        //List<Movie> movieList = (List<Movie>)movieRepository.findAll();
-            //result = array.toJSONString();
         }
         catch (JsonMappingException ex)
         {
@@ -178,7 +160,6 @@ public class AcademyAwardController
         }
         return movieList;
     }
-
 }
 
 

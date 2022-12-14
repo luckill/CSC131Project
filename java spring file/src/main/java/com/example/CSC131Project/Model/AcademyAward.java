@@ -1,14 +1,10 @@
 package com.example.CSC131Project.Model;
-
-import javax.validation.constraints.*;
 import java.util.*;
 
 
 public class AcademyAward
 {
     private int yearOfFilm;
-    @Min(1928)
-    @Max(2020)
     private int yearOfAward;
     private int ceremony;
     private String category;
