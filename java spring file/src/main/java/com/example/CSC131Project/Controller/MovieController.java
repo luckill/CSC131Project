@@ -67,11 +67,11 @@ public class MovieController {
         Movie movie = movieRepository.find1MovieByIMBDId(editedMovie.getMovieID());
         if(movie != null && editedMovie != null)
         {
-            if(editedMovie.getTitle() != movie.getTitle())
+            if(editedMovie.getTitle() == movie.getTitle())
             {
                 movie.setTitle(editedMovie.getTitle());
             }
-            if(editedMovie.getDirector() != movie.getDirector())
+            if(editedMovie.getDirector() == movie.getDirector())
             {
                 movie.setDirector(editedMovie.getDirector());
             }
@@ -79,7 +79,7 @@ public class MovieController {
             {
                 movie.setYear(editedMovie.getYear());
             }
-            if (editedMovie.getLanguage() != movie.getLanguage())
+            if (editedMovie.getLanguage() == movie.getLanguage())
             {
                 movie.setLanguage(editedMovie.getLanguage());
             }
@@ -98,7 +98,7 @@ public class MovieController {
 
     @PostMapping("/saveAMovie")
     public String saveAMovie(@Valid Movie saveMovie, Model model) throws JsonProcessingException {
-        if(saveMovie.getTitle() == "")
+        if(saveMovie.getTitle().equals(""))
         {
             String error = "Cannot add without a Title";
             model.addAttribute("error", error);
